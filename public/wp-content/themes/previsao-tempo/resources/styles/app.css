@@ -1,3 +1,60 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+
+#search-container,
+#weather-container,
+#additional-weather-info,
+#forecast-container {
+  width: 100%;
+  text-align: center;
+}
+
+#search-container,
+#weather-container,
+#additional-weather-info {
+  padding: 20px;
+}
+
+#search-container,
+#weather-container,
+#forecast-container {
+  background-color: #e6e6e6;
+}
+
+#search-container,
+#weather-container {
+  width: 50%;
+}
+
+#search-container button {
+  cursor: pointer;
+}
+
+#forecast-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.forecast-column {
+  flex: 1;
+  padding: 20px;
+  background-color: #e6e6e6;
+  text-align: center;
+}
+
+.daily-forecast-column {
+  flex: 1;
+  padding: 20px;
+  background-color: #e6e6e6;
+  text-align: center;
+}

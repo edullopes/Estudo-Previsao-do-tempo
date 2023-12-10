@@ -5,7 +5,7 @@ import domReady from '@roots/sage/client/dom-ready';
  */
 
 domReady(async () => {
-  searchButton.addEventListener('click', searchWeather);
+  // searchButton.addEventListener('click', searchWeather);
 
   const timeOptions = {
     hour: 'numeric',
@@ -60,6 +60,32 @@ domReady(async () => {
     return response.json();
   }
 
+  // Obtém a referência do input com o ID 'cityInput'
+  const cityInput = document.getElementById('cityInput');
+
+  // Adiciona um valor padrão ao input quando o DOM está pronto
+  if (cityInput) {
+    cityInput.value = 'São Paulo';
+
+    // Adiciona um ouvinte de evento para a tecla Enter no input
+    cityInput.addEventListener('keyup', (event) => {
+      // Verifica se a tecla pressionada é a tecla Enter
+      if (event.key === 'Enter') {
+        // Chama a função de pesquisa quando a tecla Enter é pressionada
+        searchWeather();
+      }
+    });
+
+    // Chama a função searchWeather para buscar automaticamente os dados meteorológicos
+    await searchWeather();
+
+    // Limpa o campo de entrada após a busca bem-sucedida
+    cityInput.value = '';
+  }
+
+  // Adiciona um ouvinte de evento ao botão de pesquisa com o ID 'searchButton'
+  searchButton.addEventListener('click', searchWeather);
+
   async function searchWeather() {
     try {
       const apiKey = '0a2240a2bf3cc04ab027bccd0fc67376';
@@ -70,7 +96,10 @@ domReady(async () => {
       const currentWeatherData = await fetchJSON(currentWeatherURL);
 
       // Extrai as coordenadas geográficas da resposta da API
-      const { lat, lon } = currentWeatherData.coord;
+      const {
+        lat,
+        lon
+      } = currentWeatherData.coord;
 
       // Consulta a API do GeoNames Timezone para obter o fuso horário
       const timezoneURL = `http://api.geonames.org/timezoneJSON?lat=${lat}&lng=${lon}&username=lopesdeveloper`;
@@ -84,7 +113,9 @@ domReady(async () => {
           const timezone = timezoneData.timezoneId;
 
           // Cria uma nova data ajustada para o fuso horário
-          const currentTime = new Date(new Date().toLocaleString("en-US", {timeZone: timezone}));
+          const currentTime = new Date(new Date().toLocaleString("en-US", {
+            timeZone: timezone
+          }));
 
           const timeString = currentTime.toLocaleTimeString(undefined, timeOptions);
 
@@ -93,6 +124,12 @@ domReady(async () => {
         } else {
           console.error('Não foi possível obter o fuso horário.');
         }
+
+        // Limpa o campo de entrada após a busca bem-sucedida
+        if (cityInput) {
+          cityInput.value = '';
+        }
+
       } catch (error) {
         console.error('Erro ao buscar o fuso horário:', error);
       }
@@ -208,4 +245,5 @@ domReady(async () => {
 /**
  * @see {@link https://webpack.js.org/api/hot-module-replacement/}
  */
-if (import.meta.webpackHot) import.meta.webpackHot.accept(console.error);
+if (
+  import.meta.webpackHot) import.meta.webpackHot.accept(console.error);

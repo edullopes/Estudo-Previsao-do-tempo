@@ -12,6 +12,13 @@ domReady(async () => {
     minute: 'numeric',
   };
 
+  const dayWeekOptions = {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
+  };
+
+
   const iconBaseUrl = 'wp-content/themes/previsao-tempo/resources/images/icones/';
   const customIcons = {
     '01d': `${iconBaseUrl}clear-day.json`,
@@ -147,13 +154,19 @@ domReady(async () => {
       }
 
       // Atualiza o restante das informações
-      document.getElementById('temperature').innerText = `Temperatura: ${parseInt(currentWeatherData.main.temp).toFixed(0)}°C`;
-      document.getElementById('cityName').innerText = `Cidade: ${currentWeatherData.name}`;
+      document.getElementById('temperature').innerText = `${parseInt(currentWeatherData.main.temp).toFixed(0)}`;
+      document.getElementById('cityName').innerText = `${currentWeatherData.name}`;
       const dateWeek = new Date(currentWeatherData.dt * 1000);
-      const dayWeekWeather = dateWeek.toLocaleDateString('pt-BR', {
-        weekday: 'long'
-      });
-      document.getElementById('dayWeek').innerText = `${dayWeekWeather}`;
+      const dateParts = dateWeek.toLocaleDateString('pt-BR', dayWeekOptions).split(' ');
+      const dayWeekWeather = `${dateParts[0]} ${dateParts[3]} ${dateParts[1]}`;
+      document.getElementById('dayWeek').innerText = dayWeekWeather;
+
+      // const dayWeekWeather = dateWeek.toLocaleDateString('pt-BR', dayWeekOptions);
+      // document.getElementById('dayWeek').innerText = `${dayWeekWeather}`;
+      // const dayWeekWeather = dateWeek.toLocaleDateString('pt-BR', {
+      //   weekday: 'long'
+      // });
+      // document.getElementById('dayWeek').innerText = `${dayWeekWeather}`;
       document.getElementById('weather__description').innerText = `${currentWeatherData.weather[0].description}`;
       document.getElementById('feelsLike').innerText = `Sensação Térmica: ${parseInt(currentWeatherData.main.feels_like).toFixed(0)}°C`;
       document.getElementById('humidity').innerText = `Umidade: ${currentWeatherData.main.humidity}%`;

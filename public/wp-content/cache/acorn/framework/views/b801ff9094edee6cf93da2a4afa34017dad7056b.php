@@ -15,17 +15,30 @@
   </div>
 
   <div id="weather-container" class="text-gray py-2">
-    <div class="mt-5">
+    <div class="mt-5 flex md:flex-col justify-between">
       <div id="lottie-container" class="icon w-24 md:w-56 h-24 md:h-56"></div>
-      <p id="temperature"></p>
+      <div class="temperature-infos flex text-[4rem] md:text-[6rem] font-extralight">
+        <p id="temperature"></p>
+        <span class="celsius text-[3rem] md:text-[4rem] md:leading-normal">°C</span>
+      </div>
     </div>
 
     <div>
-      <p id="cityName"></p>
-      <p id="dayWeek"></p>
+      <p id="cityName" class="text-xl font-bold"></p>
+      <p id="dayWeek" class="text-lg font-medium capitalize"></p>
     </div>
-    <p id="weather__description"></p>
-    <p id="dateTime"></p>
+
+    <hr class="my-4">
+
+    <div class="weather-infos flex">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+      <p id="weather__description" class="capitalize ml-2"></p>
+    </div>
+
+    <div class="date-infos flex mt-4">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true" class="h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <p id="dateTime" class="ml-2"></p>
+    </div>
   </div>
 </div>
 <?php /**PATH /var/www/html/wp-content/themes/previsao-tempo/resources/views/partials/weather-container.blade.php ENDPATH**/ ?>

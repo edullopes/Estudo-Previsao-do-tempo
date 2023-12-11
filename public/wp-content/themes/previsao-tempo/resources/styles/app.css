@@ -2,4 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-color: #121212;
+}
+
+#forecast-container {
+  padding-right: 30px;
+}
+
+.forecast-column:first-child {
+  margin-left: 0;
+}
 

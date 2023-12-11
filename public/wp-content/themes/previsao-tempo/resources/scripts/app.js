@@ -160,13 +160,6 @@ domReady(async () => {
       const dateParts = dateWeek.toLocaleDateString('pt-BR', dayWeekOptions).split(' ');
       const dayWeekWeather = `${dateParts[0]} ${dateParts[3]} ${dateParts[1]}`;
       document.getElementById('dayWeek').innerText = dayWeekWeather;
-
-      // const dayWeekWeather = dateWeek.toLocaleDateString('pt-BR', dayWeekOptions);
-      // document.getElementById('dayWeek').innerText = `${dayWeekWeather}`;
-      // const dayWeekWeather = dateWeek.toLocaleDateString('pt-BR', {
-      //   weekday: 'long'
-      // });
-      // document.getElementById('dayWeek').innerText = `${dayWeekWeather}`;
       document.getElementById('weather__description').innerText = `${currentWeatherData.weather[0].description}`;
       document.getElementById('feelsLike').innerText = `Sensação Térmica: ${parseInt(currentWeatherData.main.feels_like).toFixed(0)}°C`;
       document.getElementById('humidity').innerText = `Umidade: ${currentWeatherData.main.humidity}%`;
@@ -226,12 +219,14 @@ domReady(async () => {
           const abbreviatedDayOfWeek = dayOfWeek.slice(0, 3);
 
           const column = document.createElement('div');
-          column.classList.add('forecast-column');
+          column.classList.add('forecast-column', 'flex', 'flex-col', 'm-2','bg-black-two', 'shadow-lg', 'py-6', 'px-7', 'rounded-lg', 'justify-center', 'items-center', 'transition-all', 'hover:translate-y-5');
           column.innerHTML = `
-                    <p>${abbreviatedDayOfWeek}</p>
-                    <div id="lottie-container-${i}"></div>
-                    <p>Temp. Máxima: ${parseInt(tempMax).toFixed(0)}°C</p>
-                    <p>Temp. Mínima: ${parseInt(tempMin).toFixed(0)}°C</p>
+                    <p class="capitalize text-gray">${abbreviatedDayOfWeek}</p>
+                    <div id="lottie-container-${i}" class="h-[84px] w-[84px]"></div>
+                    <div class="flex items-center">
+                      <p class="text-gray font-medium text-base">${parseInt(tempMax).toFixed(0)}°</p>
+                      <p class="text-gray-400 text-xs">${parseInt(tempMin).toFixed(0)}°</p>
+                    </div>
                 `;
 
           document.getElementById('forecast-container').appendChild(column);

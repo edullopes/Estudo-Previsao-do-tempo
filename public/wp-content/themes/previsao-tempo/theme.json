@@ -1206,6 +1206,11 @@
           "color": "#161616",
           "name": "Black-two",
           "slug": "black-two"
+        },
+        {
+          "color": "#9ca3af",
+          "name": "Gray-400",
+          "slug": "gray-400"
         }
       ]
     },
@@ -1247,6 +1252,46 @@
         }
       ],
       "fontSizes": [
+        {
+          "name": "xs",
+          "size": "0.75rem",
+          "slug": "xs"
+        },
+        {
+          "name": "sm",
+          "size": "0.8rem",
+          "slug": "sm"
+        },
+        {
+          "name": "base",
+          "size": "1rem",
+          "slug": "base"
+        },
+        {
+          "name": "xl",
+          "size": "1.25rem",
+          "slug": "xl"
+        },
+        {
+          "name": "2xl",
+          "size": "1.563rem",
+          "slug": "2xl"
+        },
+        {
+          "name": "3xl",
+          "size": "1.953rem",
+          "slug": "3xl"
+        },
+        {
+          "name": "4xl",
+          "size": "2.441rem",
+          "slug": "4xl"
+        },
+        {
+          "name": "5xl",
+          "size": "3.052rem",
+          "slug": "5xl"
+        },
         {
           "name": "3rem",
           "size": "3rem",

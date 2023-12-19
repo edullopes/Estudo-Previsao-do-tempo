@@ -6,6 +6,5 @@
 
 @section('content')
   @include('partials.weather-container')
-  @include('partials.forecast-container')
   @include('partials.additional-weather-info')
 @endsection

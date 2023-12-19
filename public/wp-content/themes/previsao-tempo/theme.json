@@ -1268,6 +1268,11 @@
           "slug": "base"
         },
         {
+          "name": "lg",
+          "size": "1.125rem",
+          "slug": "lg"
+        },
+        {
           "name": "xl",
           "size": "1.25rem",
           "slug": "xl"

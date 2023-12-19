@@ -1,6 +1,6 @@
 <?php echo $__env->make('sections.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
-  <main id="main" class="main">
+  <main id="main" class="main md:flex max-w-screen-2xl mx-auto overflow-x-hidden lg:h-screen">
     <body>
       <?php echo $__env->yieldContent('content'); ?>
 

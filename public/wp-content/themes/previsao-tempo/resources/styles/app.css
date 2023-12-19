@@ -14,3 +14,25 @@ body {
   margin-left: 0;
 }
 
+@media(min-width: 1024px) {
+  #forecast-container::-webkit-scrollbar,
+  .additional-content::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  #forecast-container::-webkit-scrollbar-thumb {
+    background-color: #161616;
+    border-radius: 6px;
+  }
+
+  .additional-content::-webkit-scrollbar-thumb {
+    background-color: #121212;
+    border-radius: 6px;
+  }
+
+  #forecast-container::-webkit-scrollbar-track,
+  .additional-content::-webkit-scrollbar-track  {
+    background-color: transparent;
+  }
+}
+

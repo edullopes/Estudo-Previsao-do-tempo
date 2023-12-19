@@ -5,20 +5,6 @@ import domReady from '@roots/sage/client/dom-ready';
  */
 
 domReady(async () => {
-  // searchButton.addEventListener('click', searchWeather);
-
-  const timeOptions = {
-    hour: 'numeric',
-    minute: 'numeric',
-  };
-
-  const dayWeekOptions = {
-    weekday: 'long',
-    month: 'short',
-    day: 'numeric',
-  };
-
-
   const iconBaseUrl = 'wp-content/themes/previsao-tempo/resources/images/icones/';
   const customIcons = {
     '01d': `${iconBaseUrl}clear-day.json`,
@@ -48,23 +34,40 @@ domReady(async () => {
     }
   }
 
-  function createLottieAnimation(containerId, animationData) {
+  function createLottieAnimation(containerId, animationData, animationPath) {
     const container = document.getElementById(containerId);
+
     if (container) {
       const options = {
         container,
         renderer: 'svg',
         loop: true,
         autoplay: true,
-        animationData,
+        animationData: animationData || null,
+        path: animationPath || null,
       };
-      lottie.loadAnimation(options);
+
+      // Verifica se animationData não está definido e path está definido
+      if (!options.animationData && options.path) {
+        // Carrega a animação Lottie a partir do caminho
+        lottie.loadAnimation(options);
+      } else if (options.animationData) {
+        // Carrega a animação Lottie a partir do animationData
+        lottie.loadAnimation(options);
+      } else {
+        console.error('Erro: animationData ou path deve ser fornecido.');
+      }
     }
   }
 
   async function fetchJSON(url) {
-    const response = await fetch(url);
-    return response.json();
+    try {
+      const response = await fetch(url);
+      return response.json();
+    } catch (error) {
+      console.error('Erro ao buscar JSON:', error);
+      throw error;
+    }
   }
 
   // Obtém a referência do input com o ID 'cityInput'
@@ -94,158 +97,211 @@ domReady(async () => {
   searchButton.addEventListener('click', searchWeather);
 
   async function searchWeather() {
-    try {
-      const apiKey = '0a2240a2bf3cc04ab027bccd0fc67376';
-      const city = document.getElementById('cityInput').value;
+    const apiKey = '0a2240a2bf3cc04ab027bccd0fc67376';
+    const city = document.getElementById('cityInput').value;
 
-      // Condições Atuais
-      const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}&lang=pt_br`;
-      const currentWeatherData = await fetchJSON(currentWeatherURL);
+    // Condições Atuais
+    const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}&lang=pt_br`;
+    const currentWeatherData = await fetchJSON(currentWeatherURL);
 
-      // Extrai as coordenadas geográficas da resposta da API
-      const {
-        lat,
-        lon
-      } = currentWeatherData.coord;
+    // Extrai as coordenadas geográficas da resposta da API
+    const {
+      lat,
+      lon
+    } = currentWeatherData.coord;
 
-      // Consulta a API do GeoNames Timezone para obter o fuso horário
-      const timezoneURL = `http://api.geonames.org/timezoneJSON?lat=${lat}&lng=${lon}&username=lopesdeveloper`;
+    // Consulta a API do GeoNames Timezone para obter o fuso horário
+    const timezoneURL = `http://api.geonames.org/timezoneJSON?lat=${lat}&lng=${lon}&username=lopesdeveloper`;
 
-      try {
-        const timezoneResponse = await fetch(timezoneURL);
-        const timezoneData = await timezoneResponse.json();
+    const timezoneResponse = await fetch(timezoneURL);
+    const timezoneData = await timezoneResponse.json();
 
-        // Verifica se obteve sucesso na obtenção do fuso horário
-        if (timezoneData && timezoneData.timezoneId) {
-          const timezone = timezoneData.timezoneId;
+    // Verifica se obteve sucesso na obtenção do fuso horário
 
-          // Cria uma nova data ajustada para o fuso horário
-          const currentTime = new Date(new Date().toLocaleString("en-US", {
-            timeZone: timezone
-          }));
+    const timezone = timezoneData.timezoneId;
 
-          const timeString = currentTime.toLocaleTimeString(undefined, timeOptions);
+    // Cria uma nova data ajustada para o fuso horário
+    const currentTime = new Date(new Date().toLocaleString("en-US", {
+      timeZone: timezone
+    }));
 
-          document.getElementById('dateTime').innerText = `${timeString}`;
+    const timeOptions = {
+      hour: 'numeric',
+      minute: 'numeric',
+    };
 
+    const timeString = currentTime.toLocaleTimeString(undefined, timeOptions);
+
+    document.getElementById('dateTime').innerText = `${timeString}`;
+
+    const sunriseTime = new Date(currentWeatherData.sys.sunrise * 1000);
+    const sunsetTime = new Date(currentWeatherData.sys.sunset * 1000);
+
+    // Aplica o fuso horário diretamente durante a formatação
+    const sunriseTimeString = sunriseTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: false,
+      timeZone: timezone
+    });
+
+    const sunsetTimeString = sunsetTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: false,
+      timeZone: timezone
+    });
+
+    document.getElementById('sunriseTime').innerText = sunriseTimeString;
+    document.getElementById('sunsetTime').innerText = sunsetTimeString;
+
+    // Carrega a animação Lottie para o nascer do sol
+    const sunriseIconPath = `${iconBaseUrl}clear-day.json`;
+    clearElementContent('sunrise');
+    if (sunriseIconPath) {
+      createLottieAnimation('sunrise', null, sunriseIconPath);
+    }
+
+    // Carrega a animação Lottie para o pôr do sol
+    const sunsetIconPath = `${iconBaseUrl}clear-night.json`;
+    clearElementContent('sunset');
+    if (sunsetIconPath) {
+      createLottieAnimation('sunset', null, sunsetIconPath);
+    }
+
+     // Carrega a animação Lottie para a Velocidade do vento
+     const windIconPath = `${iconBaseUrl}wind.json`;
+     clearElementContent('windSpeedIcon');
+     if (windIconPath) {
+       createLottieAnimation('windSpeedIcon', null, windIconPath);
+     }
+
+     // Carrega a animação Lottie para a sensação termica
+     const feelsLikeIconPath = `${iconBaseUrl}thermometer-celsius.json`;
+     clearElementContent('feelsLikeIcon');
+     if (feelsLikeIconPath) {
+       createLottieAnimation('feelsLikeIcon', null, feelsLikeIconPath);
+     }
+
+     // Carrega a animação Lottie para a humidade
+     const humidityIconPath = `${iconBaseUrl}humidity.json`;
+     clearElementContent('humidityIcon');
+     if (humidityIconPath) {
+       createLottieAnimation('humidityIcon', null, humidityIconPath);
+     }
+
+     // Carrega a animação Lottie para a visibilidade
+     const visibilityIconPath = `${iconBaseUrl}mist.json`;
+     clearElementContent('visibilityIcon');
+     if (visibilityIconPath) {
+       createLottieAnimation('visibilityIcon', null, visibilityIconPath);
+     }
+
+     // Carrega a animação Lottie para o pôr do sol
+     const cloudsIconPath = `${iconBaseUrl}overcast.json`;
+     clearElementContent('cloudsIcon');
+     if (cloudsIconPath) {
+       createLottieAnimation('cloudsIcon', null, cloudsIconPath);
+     }
+
+    const dayWeekOptions = {
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric',
+      timeZone: timezone,
+    };
+
+    // Limpa o campo de entrada após a busca bem-sucedida
+    if (cityInput) {
+      cityInput.value = '';
+    }
+
+    const weatherIconCode = currentWeatherData.weather[0].icon;
+    const lottieAnimation = customIcons[weatherIconCode];
+
+    clearElementContent('lottie-container');
+    if (lottieAnimation) {
+      const animationData = await fetchJSON(lottieAnimation);
+      createLottieAnimation('lottie-container', animationData);
+    } else {
+      const iconImage = `<img src="http://openweathermap.org/img/wn/${weatherIconCode}.png" alt="Icone do Tempo">`;
+      document.getElementById('lottie-container').innerHTML = iconImage;
+    }
+
+    // Atualiza o restante das informações
+    document.getElementById('temperature').innerText = `${parseInt(currentWeatherData.main.temp).toFixed(0)}`;
+    document.getElementById('cityName').innerText = `${currentWeatherData.name}`;
+    const dateWeek = new Date(currentWeatherData.dt * 1000);
+    const dateParts = dateWeek.toLocaleDateString('pt-BR', dayWeekOptions).split(' ');
+    const dayWeekWeather = `${dateParts[0]} ${dateParts[3]} ${dateParts[1]}`;
+    document.getElementById('dayWeek').innerText = dayWeekWeather;
+    document.getElementById('weather__description').innerText = `${currentWeatherData.weather[0].description}`;
+    document.getElementById('feelsLike').innerText = `${parseInt(currentWeatherData.main.feels_like).toFixed(0)}`;
+    document.getElementById('humidity').innerText = `${currentWeatherData.main.humidity}`;
+    document.getElementById('visibility').innerText = `${currentWeatherData.visibility}`;
+    document.getElementById('windSpeed').innerText = `${currentWeatherData.wind.speed}`;
+    document.getElementById('clouds').innerText = `${currentWeatherData.clouds.all}`;
+
+    // Converte a velocidade do vento de m/s para km/h
+    const windSpeedInKmh = (currentWeatherData.wind.speed * 3.6).toFixed(2);
+    document.getElementById('windSpeed').innerText = `${windSpeedInKmh}`;
+
+    // Converte a visibilidade de metros para km
+    const visibilityInKm = (currentWeatherData.visibility / 1000).toFixed(0);
+    document.getElementById('visibility').innerText = `${visibilityInKm}`;
+
+    // Previsão do Tempo para os Próximos 5 Dias
+    const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${apiKey}&lang=pt_br`;
+    const forecastData = await fetchJSON(forecastURL);
+
+    // Limpa o conteúdo anterior da previsão
+    document.getElementById('forecast-container').innerHTML = '';
+
+    // Armazena os dias já processados para evitar duplicatas
+    const processedDays = [];
+
+    // Exibe a previsão para cada dia em uma coluna
+    for (let i = 0; i < forecastData.list.length; i++) {
+      const date = new Date(forecastData.list[i].dt * 1000);
+      const dateString = date.toLocaleDateString();
+      const dayOfWeek = date.toLocaleDateString('pt-BR', {
+        weekday: 'long'
+      });
+
+      // Verifica se já processamos a previsão para este dia
+      if (!processedDays.includes(dateString)) {
+        processedDays.push(dateString);
+
+        const icon = forecastData.list[i].weather[0].icon;
+        const tempMax = forecastData.list[i].main.temp_max;
+        const tempMin = forecastData.list[i].main.temp_min;
+        const abbreviatedDayOfWeek = i === 0 ? 'Hoje' : dayOfWeek.slice(0, 3);
+
+        const column = document.createElement('div');
+        column.classList.add('forecast-column', 'flex', 'flex-col', 'm-2', 'bg-black-two', 'shadow-lg', 'py-6', 'px-7', 'rounded-lg', 'justify-center', 'items-center', 'transition-all', 'hover:translate-y-5', 'mb-5');
+        column.innerHTML = `
+          <p class="capitalize text-gray">${abbreviatedDayOfWeek}</p>
+          <div id="lottie-container-${i}" class="h-[84px] w-[84px]"></div>
+          <div class="flex items-center">
+            <p class="text-gray font-medium text-base">${parseInt(tempMax).toFixed(0)}°</p>
+            <p class="text-gray-400 text-xs">${parseInt(tempMin).toFixed(0)}°</p>
+          </div>
+        `;
+
+        document.getElementById('forecast-container').appendChild(column);
+
+        // Carrega a animação Lottie
+        const lottieContainer = document.getElementById(`lottie-container-${i}`);
+        const lottieAnimation = customIcons[icon];
+
+        if (lottieAnimation) {
+          const animationData = await fetchJSON(lottieAnimation);
+          createLottieAnimation(`lottie-container-${i}`, animationData);
         } else {
-          console.error('Não foi possível obter o fuso horário.');
-        }
-
-        // Limpa o campo de entrada após a busca bem-sucedida
-        if (cityInput) {
-          cityInput.value = '';
-        }
-
-      } catch (error) {
-        console.error('Erro ao buscar o fuso horário:', error);
-      }
-
-      const weatherIconCode = currentWeatherData.weather[0].icon;
-      const lottieAnimation = customIcons[weatherIconCode];
-
-      clearElementContent('lottie-container');
-      if (lottieAnimation) {
-        const animationData = await fetchJSON(lottieAnimation);
-        createLottieAnimation('lottie-container', animationData);
-      } else {
-        const iconImage = `<img src="http://openweathermap.org/img/wn/${weatherIconCode}.png" alt="Icone do Tempo">`;
-        document.getElementById('lottie-container').innerHTML = iconImage;
-      }
-
-      // Atualiza o restante das informações
-      document.getElementById('temperature').innerText = `${parseInt(currentWeatherData.main.temp).toFixed(0)}`;
-      document.getElementById('cityName').innerText = `${currentWeatherData.name}`;
-      const dateWeek = new Date(currentWeatherData.dt * 1000);
-      const dateParts = dateWeek.toLocaleDateString('pt-BR', dayWeekOptions).split(' ');
-      const dayWeekWeather = `${dateParts[0]} ${dateParts[3]} ${dateParts[1]}`;
-      document.getElementById('dayWeek').innerText = dayWeekWeather;
-      document.getElementById('weather__description').innerText = `${currentWeatherData.weather[0].description}`;
-      document.getElementById('feelsLike').innerText = `Sensação Térmica: ${parseInt(currentWeatherData.main.feels_like).toFixed(0)}°C`;
-      document.getElementById('humidity').innerText = `Umidade: ${currentWeatherData.main.humidity}%`;
-      document.getElementById('visibility').innerText = `Visibilidade: ${currentWeatherData.visibility}`;
-      document.getElementById('windSpeed').innerText = `Velocidade do Vento: ${currentWeatherData.wind.speed}`;
-      document.getElementById('clouds').innerText = `Cobertura de Nuvens: ${currentWeatherData.clouds.all}%`;
-
-      // Adiciona nascer e pôr do sol aos parágrafos específicos
-      const sunriseTime = new Date(currentWeatherData.sys.sunrise * 1000).toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true
-      });
-      const sunsetTime = new Date(currentWeatherData.sys.sunset * 1000).toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true
-      });
-
-      document.getElementById('sunrise').innerText = `Nascer do Sol: ${sunriseTime}`;
-      document.getElementById('sunset').innerText = `Pôr do Sol: ${sunsetTime}`;
-
-      // Converte a velocidade do vento de m/s para km/h
-      const windSpeedInKmh = (currentWeatherData.wind.speed * 3.6).toFixed(2);
-      document.getElementById('windSpeed').innerText = `Velocidade do Vento: ${windSpeedInKmh} km/h`;
-
-      // Converte a visibilidade de metros para km
-      const visibilityInKm = (currentWeatherData.visibility / 1000).toFixed(0);
-      document.getElementById('visibility').innerText = `Visibilidade: ${visibilityInKm} km`;
-
-      // Previsão do Tempo para os Próximos 5 Dias
-      const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${apiKey}&lang=pt_br`;
-      const forecastData = await fetchJSON(forecastURL);
-
-      // Limpa o conteúdo anterior da previsão
-      document.getElementById('forecast-container').innerHTML = '';
-
-      // Armazena os dias já processados para evitar duplicatas
-      const processedDays = [];
-
-      // Exibe a previsão para cada dia em uma coluna
-      for (let i = 0; i < forecastData.list.length; i++) {
-        const date = new Date(forecastData.list[i].dt * 1000);
-        const dateString = date.toLocaleDateString();
-        const dayOfWeek = date.toLocaleDateString('pt-BR', {
-          weekday: 'long'
-        });
-
-        // Verifica se já processamos a previsão para este dia
-        if (!processedDays.includes(dateString)) {
-          processedDays.push(dateString);
-
-          // const timeString = date.toLocaleTimeString(undefined, timeOptions);
-          const icon = forecastData.list[i].weather[0].icon;
-          const tempMax = forecastData.list[i].main.temp_max;
-          const tempMin = forecastData.list[i].main.temp_min;
-          const abbreviatedDayOfWeek = dayOfWeek.slice(0, 3);
-
-          const column = document.createElement('div');
-          column.classList.add('forecast-column', 'flex', 'flex-col', 'm-2','bg-black-two', 'shadow-lg', 'py-6', 'px-7', 'rounded-lg', 'justify-center', 'items-center', 'transition-all', 'hover:translate-y-5');
-          column.innerHTML = `
-                    <p class="capitalize text-gray">${abbreviatedDayOfWeek}</p>
-                    <div id="lottie-container-${i}" class="h-[84px] w-[84px]"></div>
-                    <div class="flex items-center">
-                      <p class="text-gray font-medium text-base">${parseInt(tempMax).toFixed(0)}°</p>
-                      <p class="text-gray-400 text-xs">${parseInt(tempMin).toFixed(0)}°</p>
-                    </div>
-                `;
-
-          document.getElementById('forecast-container').appendChild(column);
-
-          // Carrega a animação Lottie
-          const lottieContainer = document.getElementById(`lottie-container-${i}`);
-          const lottieAnimation = customIcons[icon];
-
-          if (lottieAnimation) {
-            const animationData = await fetchJSON(lottieAnimation);
-            createLottieAnimation(`lottie-container-${i}`, animationData);
-          } else {
-            // Caso não haja uma animação correspondente, usa um ícone padrão
-            lottieContainer.innerHTML = `<img src="http://openweathermap.org/img/wn/${icon}.png" alt="Icone do Tempo">`;
-          }
+          // Caso não haja uma animação correspondente, usa um ícone padrão
+          lottieContainer.innerHTML = `<img src="http://openweathermap.org/img/wn/${icon}.png" alt="Icone do Tempo">`;
         }
       }
-    } catch (error) {
-      console.error('Erro ao buscar dados do tempo:', error);
     }
   }
 });

@@ -1,6 +1,6 @@
 @include('sections.header')
 
-  <main id="main" class="main">
+  <main id="main" class="main md:flex max-w-screen-2xl mx-auto overflow-x-hidden lg:h-screen">
     <body>
       @yield('content')
 

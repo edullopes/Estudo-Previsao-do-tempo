@@ -52,3 +52,4 @@ composer.lock
 
 # Ignore diretório de cache de visualizações do Sage 10
 /storage/framework/views
+public/wp-content/ai1wm-backups/localhost-20231228-212845-u437ea.wpress

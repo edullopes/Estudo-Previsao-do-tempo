@@ -111,14 +111,15 @@ domReady(async () => {
     } = currentWeatherData.coord;
 
     // Consulta a API do GeoNames Timezone para obter o fuso horário
-    const timezoneURL = `http://api.geonames.org/timezoneJSON?lat=${lat}&lng=${lon}&username=lopesdeveloper`;
-
+    // const timezoneURL = `http://api.geonames.org/timezoneJSON?lat=${lat}&lng=${lon}&username=lopesdeveloper`;
+    const timezoneApiKey = '2ZIV7MHCVXTW'
+    const timezoneURL = `https://api.timezonedb.com/v2.1/get-time-zone?key=${timezoneApiKey}&format=json&by=position&lat=${lat}&lng=${lon}`;
     const timezoneResponse = await fetch(timezoneURL);
     const timezoneData = await timezoneResponse.json();
 
     // Verifica se obteve sucesso na obtenção do fuso horário
-
-    const timezone = timezoneData.timezoneId;
+    // const timezone = timezoneData.timezoneId;
+    const timezone = timezoneData.zoneName;
 
     // Cria uma nova data ajustada para o fuso horário
     const currentTime = new Date(new Date().toLocaleString("en-US", {

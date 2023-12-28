@@ -11,9 +11,6 @@ jobs:
     - name: Checkout the files
       uses: actions/checkout@v3
 
-    - name: Install rsync on remote machine
-      run: ssh -o StrictHostKeyChecking=no -i /home/runner/.ssh/deploy_key_bitnami_1703782137940 bitnami@ec2-15-228-88-175.sa-east-1.compute.amazonaws.com 'sudo apt-get install -y rsync'
-
     - name: Copy files with SSH
       uses: easingthemes/ssh-deploy@main
       env:

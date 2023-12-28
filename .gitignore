@@ -1,3 +1,54 @@
 public/wp-content/ai1wm-backups/localhost-20231219-134449-0xxwex.wpress
 public/wp-content/ai1wm-backups/localhost-20231228-034104-sh01ag.wpress
 public/wp-content/ai1wm-backups/localhost-20231228-043941-aezdwy.wpress
+
+# Ignore arquivos e diretórios gerados pelo sistema
+/node_modules
+/vendor
+/storage
+/public/storage
+
+# Ignore arquivos de ambiente
+.env
+
+# Ignore arquivos de configuração específicos do ambiente
+/config/local/*.php
+/config/*.php
+
+# Ignore logs e caches
+/log
+/bootstrap/cache
+
+# Ignore arquivos de configuração do servidor web
+/public/.htaccess
+
+# Ignore arquivos de construção
+/dist
+/*.lock
+
+# Ignore arquivos de configuração de IDE
+.idea/
+.vscode/
+
+# Ignore arquivos de backup
+*.bak
+*.swp
+
+# Ignore arquivos temporários
+*.log
+*.tmp
+*.temp
+
+# Ignore arquivos de configuração do PHP
+php.ini
+
+# Ignore arquivos de configuração do Sage 10
+/vendor
+composer.json
+composer.lock
+
+# Ignore diretório de uploads de mídia (pode não ser necessário se você gerencia uploads fora do diretório do WordPress)
+/public/app/uploads
+
+# Ignore diretório de cache de visualizações do Sage 10
+/storage/framework/views

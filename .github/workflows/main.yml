@@ -11,11 +11,32 @@ jobs:
     - name: Checkout the files
       uses: actions/checkout@v3
 
+    - name: SSH Login as bitnami
+      uses: appleboy/ssh-action@master
+      with:
+        host: "ec2-18-228-188-214.sa-east-1.compute.amazonaws.com"
+        username: bitnami
+        key: ${{ secrets.EC2_SSH_KEY }}
+        port: 22
+        script: |
+          # Commands to run as bitnami
+          echo "Logged in as bitnami"
+          sudo su  # Use 'sudo' to switch to root
+          
+          # Now you are root, you can perform root-level commands here
+          echo "Logged in as root"
+          
+          # Your root-level commands go here
+          
+          # Exit from root
+          exit
+          
+          # More commands as bitnami if needed
+
     - name: Copy files with SSH
       uses: easingthemes/ssh-deploy@main
       env:
         SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-        ARGS: "-rltgoDzvO --delete"
         SOURCE: "./public/wp-content/themes/previsao-tempo/*"
         REMOTE_HOST: "ec2-18-228-188-214.sa-east-1.compute.amazonaws.com"
         REMOTE_USER: "bitnami"

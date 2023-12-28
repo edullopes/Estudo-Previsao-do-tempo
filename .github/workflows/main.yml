@@ -16,6 +16,6 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
         SOURCE: "./public/wp-content/themes/previsao-tempo/"
-        REMOTE_HOST: "ec2-18-228-188-214.sa-east-1.compute.amazonaws.com"
+        REMOTE_HOST: "ec2-18-230-117-236.sa-east-1.compute.amazonaws.com"
         REMOTE_USER: "bitnami"
         TARGET: "/home/bitnami/stack/wordpress/wp-content/themes/previsao-tempo"

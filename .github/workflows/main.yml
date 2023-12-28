@@ -11,6 +11,9 @@ jobs:
     - name: Checkout the files
       uses: actions/checkout@v3
 
+    - name: Install rsync
+      run: sudo apt-get install -y rsync
+
     - name: Copy files with SSH
       uses: easingthemes/ssh-deploy@main
       env:

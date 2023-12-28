@@ -1,11 +1,3 @@
-/node_modules
-/vendor
-/public
-.env
-.budfiles
-npm-debug.log
-yarn-error.log
-
 # Ignore arquivos e diretórios gerados pelo sistema
 /node_modules
 /vendor
@@ -56,4 +48,3 @@ composer.lock
 
 # Ignore diretório de cache de visualizações do Sage 10
 /storage/framework/views
-

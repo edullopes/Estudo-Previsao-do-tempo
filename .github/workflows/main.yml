@@ -23,6 +23,7 @@ jobs:
         SCRIPT_AFTER: |
           whoami
           ls -al
+          cd /home/bitnami/stack/wordpress/wp-content/themes/previsao-tempo
           composer install
           echo $RSYNC_STDOUT
 

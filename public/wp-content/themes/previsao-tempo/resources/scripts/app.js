@@ -273,10 +273,10 @@ domReady(async () => {
       if (!processedDays.includes(dateString)) {
         processedDays.push(dateString);
 
-        // const icon = forecastData.list[i].weather[0].icon;
-        // const tempMax = forecastData.list[i].main.temp_max;
-        // const tempMin = forecastData.list[i].main.temp_min;
-        // const abbreviatedDayOfWeek = i === 0 ? 'Hoje' : dayOfWeek.slice(0, 3);
+        const icon = forecastData.list[i].weather[0].icon;
+        const tempMax = forecastData.list[i].main.temp_max;
+        const tempMin = forecastData.list[i].main.temp_min;
+        const abbreviatedDayOfWeek = i === 0 ? 'Hoje' : dayOfWeek.slice(0, 3);
 
         const column = document.createElement('div');
         column.classList.add('forecast-column', 'flex', 'flex-col', 'm-2', 'bg-black-two', 'shadow-lg', 'py-6', 'px-7', 'rounded-lg', 'justify-center', 'items-center', 'transition-all', 'hover:translate-y-5', 'mb-5');

@@ -22,6 +22,6 @@ jobs:
         TARGET: "/home/bitnami/stack/wordpress/wp-content/themes/previsao-tempo"
     
     - name: Run composer install
-      run: |
-        cd /home/bitnami/stack/wordpress/wp-content/themes/previsao-tempo
-        composer install
+      run: composer install
+      working-directory: /home/bitnami/stack/wordpress/wp-content/themes/previsao-tempo
+

@@ -1,5 +1,5 @@
 <div class="additional-content md:w-2/3 bg-black-one py-5 px-5 lg:px-10 overflow-hidden md:overflow-y-scroll">
-  <h1 class="text-gray text-2xl font-black uppercase lg:pb-5">PREVISÃO DO TEMPO 123</h1>
+  <h1 class="text-gray text-2xl font-black uppercase lg:pb-5">PREVISÃO DO TEMPO</h1>
   <div id="forecast-container" class="flex justify-between overflow-x-scroll w-screen md:w-full pl-0 pt-4 mb-12"></div>
   <div class="container" id="additional-weather-info">
     <h2 class="text-lg text-gray font-bold mb-4">Insights Meteorológicos</h2>

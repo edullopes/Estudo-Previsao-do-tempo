@@ -42,14 +42,6 @@ public/wp-content/ai1wm-backups/localhost-20231228-043941-aezdwy.wpress
 # Ignore arquivos de configuração do PHP
 php.ini
 
-# Ignore arquivos de configuração do Sage 10
-/vendor
-composer.json
-composer.lock
-
-# Ignore diretório de uploads de mídia (pode não ser necessário se você gerencia uploads fora do diretório do WordPress)
-/public/app/uploads
-
 # Ignore diretório de cache de visualizações do Sage 10
 /storage/framework/views
 public/wp-content/ai1wm-backups/localhost-20231228-212845-u437ea.wpress

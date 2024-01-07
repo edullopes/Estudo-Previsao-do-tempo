@@ -21,10 +21,4 @@ jobs:
         REMOTE_USER: "bitnami"
         TARGET: "/home/bitnami/stack/wordpress/wp-content/themes/previsao-tempo"
         EXCLUDE: "/vendor/, /node_modules/, **.env, rebuild_app.sh, watcher.sh"
-        SCRIPT_AFTER: |
-          whoami
-          ls -al
-          cd /home/bitnami/stack/wordpress/wp-content/themes/previsao-tempo
-          composer install
-          echo $RSYNC_STDOUT
 

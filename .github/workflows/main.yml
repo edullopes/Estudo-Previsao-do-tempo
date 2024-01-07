@@ -20,7 +20,7 @@ jobs:
         REMOTE_HOST: "ec2-18-230-115-124.sa-east-1.compute.amazonaws.com"
         REMOTE_USER: "bitnami"
         TARGET: "/home/bitnami/stack/wordpress/wp-content/themes/previsao-tempo"
-        EXCLUDE: "/dist/, /node_modules/, **.env, rebuild_app.sh, watcher.sh"
+        EXCLUDE: "/vendor/, /node_modules/, **.env, rebuild_app.sh, watcher.sh"
         SCRIPT_AFTER: |
           whoami
           ls -al
